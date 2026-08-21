@@ -1,0 +1,298 @@
+# Use "dynamic tiling" instead of default behavior.
+# See https://github.com/nwg-piotr/autotiling
+#TODO exec_always autotiling
+
+# Use alt key as mod key instead of windows key.
+#set $mod Mod4
+set $mod Mod1
+
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Preferred terminal emulator
+set $term urxvt
+
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+#set $menu dmenu_path | dmenu | xargs swaymsg exec --
+#set $menu wofi --show=drun --lines ---> TODO wofi ist für wayland -> was ist X11 aequivalent?
+
+# Keybindings for starting external programs.
+bindsym ctrl+space exec $menu
+bindsym ctrl+m exec firefox
+bindsym ctrl+8 exec LANG=de_DE.UTF-8 thunderbird
+# bindsym ctrl+8 exec LANG=de_DE.UTF-8 GTK_THEME=Adwaita:dark geary
+bindsym ctrl+semicolon exec alacritty
+bindsym ctrl+odiaeresis exec alacritty
+
+#assign [app_id="firefox"] 9
+
+input * {
+	xkb_layout "us,de"
+	xkb_options "grp:alt_space_toggle"
+	#xkb_options "grp:alt_space_toggle,caps:escape"
+}
+input "1:1:AT_Translated_Set_2_keyboard" xkb_model "pc101"
+#input "1:1:AT_Translated_Set_2_keyboard" xkb_options caps:escape
+input "1:1:AT_Translated_Set_2_keyboard" repeat_delay 300
+input "1:1:AT_Translated_Set_2_keyboard" repeat_rate 30
+
+## (see: man sway-input)
+#input type:touchpad {
+#	tap enabled
+#	tap_button_map lmr
+#
+#	# From GPT: Use clickfinger mode (more reliable for tap gestures)
+#    #click_method clickfinger
+#	# From GPT: Für konsistente Linksklicks bei 1-Finger-Tap verwende click_method buttonareas. Bei buttonareas werden die unteren Bereiche des Touchpads wie echte Tasten interpretiert (links/rechts), während bei clickfinger die Fingeranzahl zählt.
+#	click_method button_areas
+#
+#    # From GPT: Prevent stuck "tap-drag" or scroll behavior -> @me Problem tritt weiterhin auf.
+#	#drag enabled
+#	# From GPT: drag enabled mit clickfinger kann manchmal „stuck right-clicks“ verursachen, besonders wenn Tap+Drag aktiviert ist. Test: Temporär drag disabled und tap enabled mit click_method buttonareas → prüfe, ob das Problem verschwindet.
+#	drag disabled
+#	#drag_lock disabled
+#
+#	# From GPT: "If you rarely use tap-drag (dragging a window or selection by tapping), you can disable it completely. That alone often eliminates the “stuck click causes scrolling” behavior." -> @me geht auch nicht, denn dann habe ich ein neues Problem: ein linker Mausclick wird oft als rechter Mausclick erkannt.
+#	#drag disabled
+#
+#	dwt enabled
+#	#dwt disabled
+#	#drag enabled
+#	natural_scroll enabled
+#	middle_emulation enabled
+#	#accel_profile adaptive
+#	accel_profile flat # @me ich teste, ob damit der scroll-bug weiterhin auftritt.
+#	pointer_accel 0.1
+#	scroll_method two_finger
+#	scroll_button disable
+#}
+
+
+#
+# KEY BINDINGS
+#
+
+# Kill focused window
+bindsym $mod+c kill
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+# Reload the configuration file
+bindsym $mod+Shift+r reload
+
+# Exit sway (logs you out of your Wayland session)
+#bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+#bindsym $mod+Shift+e exit
+bindsym $mod+Shift+Backspace exit
+
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Move the focused window around.
+# @me: The sway default behavior is not good, especially with autotiling enabled. Therefore, I'm using the following compound commands instead. This will effectively swap windows in the given direction. Idea from: https://www.reddit.com/r/swaywm/comments/z6t24k/how_to_swap_two_containerswindows/
+#
+#bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$left mark swap, focus left, swap container with mark swap, focus left
+# bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+$right mark swap, focus right, swap container with mark swap, focus right
+# bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$down mark swap, focus down, swap container with mark swap, focus down
+# bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$up mark swap, focus up, swap container with mark swap, focus up
+
+# Define workspaces (using the letter "O" (not the number 0 because then this workspace would be displayed before ws 1, not after ws 9) for workspace 10 in order to only have one character instead of two)
+set $ws10 "O" 
+
+# Switch to workspace
+# bindsym $mod+1 workspace number 1
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+# bindsym $mod+0 workspace number 10
+bindsym $mod+0 workspace $ws10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1, workspace 1
+bindsym $mod+Shift+2 move container to workspace number 2, workspace 2
+bindsym $mod+Shift+3 move container to workspace number 3, workspace 3
+bindsym $mod+Shift+4 move container to workspace number 4, workspace 4
+bindsym $mod+Shift+5 move container to workspace number 5, workspace 5
+bindsym $mod+Shift+6 move container to workspace number 6, workspace 6
+bindsym $mod+Shift+7 move container to workspace number 7, workspace 7
+bindsym $mod+Shift+8 move container to workspace number 8, workspace 8
+bindsym $mod+Shift+9 move container to workspace number 9, workspace 9
+# bindsym $mod+Shift+0 move container to workspace number 10, workspace 10
+bindsym $mod+Shift+0 move container to workspace $ws10, workspace $ws10
+
+# Switch between current and previous workspace.
+bindsym Mod1+odiaeresis workspace back_and_forth
+bindsym Mod1+semicolon workspace back_and_forth
+
+#
+# LAYOUT HANDLING:
+#
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+#bindsym $mod+b splith
+#bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+# bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+m fullscreen toggle
+
+# Toggle the current focus between tiling and floating mode
+# bindsym $mod+Shift+space floating toggle
+bindsym $mod+f floating toggle
+
+# Swap focus between the tiling area and the floating area
+#bindsym $mod+space focus mode_toggle
+
+# Move focus to the parent container
+#bindsym $mod+a focus parent
+
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#
+# Colors
+#
+# client.<class> <border> <background> <text> [<indicator> [<child_border>]]
+# Configures the color of window borders and title bars. The first three colors are required. When omitted indicator will use a sane default and child_border will use the color set for background. Colors may be specified in hex, either as #RRGGBB or #RRGGBBAA. 
+#
+# The meaning of each color is:
+#
+# border
+# The border around the title bar.
+#
+# background
+# The background of the title bar.
+#
+# text
+# The text color of the title bar.
+#
+# indicator
+# The color used to indicate where a new window will open. In a tiled container, this would paint the right border of the current window if a new window would be opened to the right.
+#
+# child_border
+# The border around the window itself.
+#
+# client.focused   #4c7899 #285577 #dddddd
+# client.unfocused #333333 #333333 #888888
+client.focused   #4c7899 #285577 #dddddd #eeeeee #eeeeee
+client.unfocused #333333 #333333 #888888 #333333 #333333
+client.focused_inactive #333333 #333333 #888888 #333333 #333333
+
+#
+# Status Bar:
+#
+bar {
+	#swaybar_command waybar
+    position top
+
+    # FONT for status bar:
+    #font pango:monospace 20
+    #font pango:LiberationMono 12
+    #font pango:LiberationMono 10
+    # font pango:monospace Bold 11
+    # font pango:JetBrainsMono Nerd Font Bold 11
+    # font pango:JetBrainsMono Nerd Font Bold 12
+    #
+    # ANM: Using "Propo" fonts fixes the spacing issues with the differently sized unicode symbols.
+    font pango:JetBrainsMono Nerd Font Propo Bold 11
+
+    #status_command while date +'%Y-%m-%d %I:%M'; do sleep 1; done
+    # status_command ~/.config/sway/my_i3bar.sh
+    #
+    # TODO
+    #status_command ~/.config/sway/my_swaybar.sh
+
+    colors {
+        background #333333
+        statusline #dddddd
+
+        # <border> <background> <text>
+        #focused_workspace  #555555 #444444 #dddddd
+        #focused_workspace  #444444 #444444 #dddddd
+        #inactive_workspace #222222 #222222 #999999
+        focused_workspace  #555555 #555555 #dddddd
+        inactive_workspace #333333 #333333 #999999
+        #active_workspace
+        urgent_workspace   #600000 #600000 #dddddd
+    }
+}
+
+# External monitor
+set $internal eDP-1
+set $external-left DP-4
+set $external-right DP-5
+
+# Workspaces that should live on the external monitor
+workspace 1 output $external-left
+workspace 2 output $external-left
+workspace 3 output $external-left
+workspace 4 output $external-left
+workspace 5 output $external-left
+workspace 6 output $external-left
+workspace 7 output $external-right
+workspace 8 output $external-right
+workspace 9 output $external-right
+workspace $ws10 output $external-right
+
+# GAPS:
+# If smart_gaps are on gaps will only be enabled if a workspace has more than one child.
+# TODO bei i3?
+#smart_gaps on
+#gaps inner 3
+
+# BORDERS:
+# If smart_borders are on, borders will only be enabled if the workspace has more than one visible child.
+# TODO bei i3?
+#smart_borders on
+#default_border pixel 3
+#hide_edge_borders --i3 both
